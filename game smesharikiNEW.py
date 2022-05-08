@@ -79,8 +79,8 @@ class MyGame(arcade.Window):
         self.coin_list.draw()
 
         score_text = f"Score: {self.score}"
-        arcade.draw_text(score_text, 100 + self.view_right, 100 + self.view_top,
-                         arcade.csscolor.WHITE, 200)
+        arcade.draw_text(score_text, 5 + self.view_right, 10 + self.view_top,
+                         arcade.csscolor.WHITE, 30)
 
 
 #прописываю кнопочки при нажатии, скорость
