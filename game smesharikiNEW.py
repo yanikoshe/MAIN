@@ -26,7 +26,11 @@ class MyGame(arcade.Window):
         self.physics_engine = None
         self.scene = None
         self.camera = None
-
+        self.tile_map = None
+        self.end_of_map = 0
+        self.level = 1
+        self.max_level = 2
+        self.frame_count = 0
         #звук собирания звезд
         self.coin_list = None
         self.collect_coin_sound = arcade.load_sound("E:\УНИК\программирование\игра\zvezda.wav")
@@ -36,6 +40,7 @@ class MyGame(arcade.Window):
         self.view_left = 0
         self.view_right = 0
         self.view_top = 0
+
 
         self.score = 0
 
@@ -53,33 +58,23 @@ class MyGame(arcade.Window):
         self.player_sprite.center_x = 300
         self.player_sprite.center_y = 350
         self.scene.add_sprite("Player", self.player_sprite)
-        self.physics_engine = arcade.PhysicsEngineSimple(
-            self.player_sprite, self.wall_list)
 
-#пол, по которому бегает персонаж
-        for x in range(0, 9900, 900):
-            wall = arcade.Sprite("E:\УНИК\программирование\игра\спрайты\пол.png")
-            wall.center_x = x
-            wall.center_y = -200
-            self.scene.add_sprite("Walls", wall)
-#добавляю пеньки
-        coordinate_list = [[800, 350], [2900, 350], [3800, 350], [5300, 350], [7100, 350], [9900, 350]]
-        for coordinate in coordinate_list:
-            wall = arcade.Sprite("E:\УНИК\программирование\игра\спрайты\пень.png")
-            wall.position = coordinate
-            self.scene.add_sprite("Walls", wall)
+        self.load_level(self.level)
 
+    def load_level(self, level):
+        self.tile_map = arcade.load_tilemap("E:\УНИК\программирование\игра\level11.tmj")
 
-#добавляю звезды, которые будет собирать персонаж
-        for x in range(600, 10000, 900):
-            coin = arcade.Sprite("E:\УНИК\программирование\игра\спрайты\звезда.png")
-            coin.center_x = x
-            coin.center_y = 350
-            self.coin_list.append(coin)
+        self.end_of_map = self.tile_map.width
 
         self.physics_engine = arcade.PhysicsEnginePlatformer(
-            self.player_sprite, gravity_constant=GRAVITY, walls=self.scene["Walls"]
+            self.player_sprite,
+            self.tile_map.sprite_lists["platforms"],
+            gravity_constant=GRAVITY,
         )
+        if self.tile_map.background_color:
+            arcade.set_background_color(self.tile_map.background_color)
+
+
 #теперь всё это "рисуем"
     def on_draw(self):
 
@@ -93,6 +88,10 @@ class MyGame(arcade.Window):
                          self.player_sprite.center_y + 280,
                          arcade.csscolor.WHITE, 40, 10, 'left')
         self.scene.draw()
+        self.frame_count += 1
+        self.clear()
+
+        self.tile_map.sprite_lists["platforms"].draw()
 
 #прописываю кнопочки при нажатии, скорость
     def on_key_press(self, key, modifiers):
@@ -147,6 +146,15 @@ class MyGame(arcade.Window):
 
         self.physics_engine.update()
         self.center_camera_to_player()
+
+        if self.player_sprite.right >= self.end_of_map:
+            if self.level < self.max_level:
+                self.level += 1
+                self.load_level(self.level)
+                self.player_sprite.center_x = 128
+                self.player_sprite.center_y = 64
+                self.player_sprite.change_x = 0
+                self.player_sprite.change_y = 0
 #само окошко
 def main():
     window = MyGame()
