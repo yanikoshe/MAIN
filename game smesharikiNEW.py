@@ -5,7 +5,7 @@ SCREEN_HEIGHT = 900
 SCREEN_TITLE = "Wolf"
 
 PLAYER_MOVEMENT_SPEED = 10
-UPDATES_PER_FRAME = 15
+UPDATES_PER_FRAME = 5
 GRAVITY = 1
 PLAYER_JUMP_SPEED = 20
 
@@ -38,6 +38,12 @@ class MyGame(arcade.Window):
         self.coin_list = None
         self.collect_coin_sound = arcade.load_sound("E:\УНИК\программирование\игра\zvezda.wav")
         arcade.set_background_color(arcade.color.COOL_BLACK)
+
+        self.view_bottom = 0
+        self.view_left = 0
+        self.view_right = 0
+        self.view_top = 0
+
 
         self.score = 0
 
@@ -73,13 +79,13 @@ class MyGame(arcade.Window):
         self.scene.add_sprite("Player", self.player_sprite)
 
     # пол, по которому бегает персонаж
-        for x in range(0, 9000, 900):
+        for x in range(0, 9900, 900):
             wall = arcade.Sprite("E:\УНИК\программирование\игра\спрайты\пол.png")
             wall.center_x = x
             wall.center_y = -200
             self.scene.add_sprite("Walls", wall)
     # добавляю пеньки
-        coordinate_list = [[800, 350], [2900, 350], [3800, 350], [5300, 350], [7100, 350], [9900, 350]]
+        coordinate_list = [[1900, 350], [2900, 350], [3800, 350], [5300, 350], [7100, 350], [9900, 350]]
         for coordinate in coordinate_list:
             wall = arcade.Sprite("E:\УНИК\программирование\игра\спрайты\пень.png")
             wall.position = coordinate
@@ -102,7 +108,7 @@ class MyGame(arcade.Window):
 
         self.camera.use()
         arcade.start_render()
-        arcade.draw_text(SCREEN_TITLE, 50, 850, arcade.color.BLACK, 30)
+        arcade.draw_text(SCREEN_TITLE, 50, 850, arcade.color.WHITE, 30)
         self.coin_list.draw()
         self.player_sprite.draw()
 
@@ -152,7 +158,7 @@ class MyGame(arcade.Window):
 
         self.camera.move_to(player_centered)
 
-    def on_update(self, delta_time):  #время между кадрами
+    def on_update(self, delta_time):
         self.player_sprite.update()
         self.player_sprite.update_animation()
 
