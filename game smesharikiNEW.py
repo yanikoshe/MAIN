@@ -5,8 +5,12 @@ SCREEN_HEIGHT = 900
 SCREEN_TITLE = "Wolf"
 
 PLAYER_MOVEMENT_SPEED = 10
+UPDATES_PER_FRAME = 15
 GRAVITY = 1
 PLAYER_JUMP_SPEED = 20
+
+RIGHT_FACING = 0
+LEFT_FACING = 1
 
 LEFT_VIEWPORT_MARGIN = 250
 RIGHT_VIEWPORT_MARGIN = 250
@@ -23,20 +27,17 @@ class MyGame(arcade.Window):
         self.wall_list = None
         self.player_sprite = None
         self.player_list = None
+        self.player = None
         self.physics_engine = None
         self.scene = None
         self.camera = None
+        self.setup()
+
 
         #звук собирания звезд
         self.coin_list = None
         self.collect_coin_sound = arcade.load_sound("E:\УНИК\программирование\игра\zvezda.wav")
         arcade.set_background_color(arcade.color.COOL_BLACK)
-
-        self.view_bottom = 0
-        self.view_left = 0
-        self.view_right = 0
-        self.view_top = 0
-
 
         self.score = 0
 
@@ -51,12 +52,28 @@ class MyGame(arcade.Window):
         self.coin_list = arcade.SpriteList(use_spatial_hash=True)
 
         self.player_sprite = arcade.Sprite(image_source)
+        self.player_sprite = arcade.AnimatedWalkingSprite()
+
+        #стоит право
+        self.player_sprite.stand_right_textures = []
+        self.player_sprite.stand_right_textures.append(arcade.load_texture("E:\УНИК\программирование\игра\спрайты\перс-стоит.png"))
+        #стоит лево
+        self.player_sprite.stand_left_textures = []
+        self.player_sprite.stand_left_textures.append(arcade.load_texture("E:\УНИК\программирование\игра\спрайты\перс-стоит.png"))
+        #идёт право
+        self.player_sprite.walk_right_textures = []
+        self.player_sprite.walk_right_textures.append(arcade.load_texture("E:\УНИК\программирование\игра\спрайты\перс-идет.png"))
+        #идёт лево
+        self.player_sprite.walk_left_textures = []
+        self.player_sprite.walk_left_textures.append(arcade.load_texture("E:\УНИК\программирование\игра\спрайты\перс-идет2.png"))
+
+
         self.player_sprite.center_x = 300
         self.player_sprite.center_y = 350
         self.scene.add_sprite("Player", self.player_sprite)
 
     # пол, по которому бегает персонаж
-        for x in range(0, 9900, 900):
+        for x in range(0, 9000, 900):
             wall = arcade.Sprite("E:\УНИК\программирование\игра\спрайты\пол.png")
             wall.center_x = x
             wall.center_y = -200
@@ -85,7 +102,9 @@ class MyGame(arcade.Window):
 
         self.camera.use()
         arcade.start_render()
+        arcade.draw_text(SCREEN_TITLE, 50, 850, arcade.color.BLACK, 30)
         self.coin_list.draw()
+        self.player_sprite.draw()
 
         score_text = f"Score: {self.score}"
         arcade.draw_text('stars: '+str(self.score),
@@ -117,7 +136,7 @@ class MyGame(arcade.Window):
         elif key == arcade.key.RIGHT or key == arcade.key.D:
             self.player_sprite.change_x = 0
 
-#прописываю обновление состояния игры и всех объектов в ней, чтобы звездоки пропадали
+#прописываю обновление состояния игры и всех объектов в ней, чтобы звездочки пропадали
 
     def center_camera_to_player(self):
         screen_center_x = self.player_sprite.center_x - (self.camera.viewport_width / 2)
@@ -133,7 +152,10 @@ class MyGame(arcade.Window):
 
         self.camera.move_to(player_centered)
 
-    def on_update(self, delta_time):
+    def on_update(self, delta_time):  #время между кадрами
+        self.player_sprite.update()
+        self.player_sprite.update_animation()
+
 
         coin_hit_list = arcade.check_for_collision_with_list(
             self.player_sprite, self.coin_list
