@@ -39,12 +39,6 @@ class MyGame(arcade.Window):
         self.collect_coin_sound = arcade.load_sound("E:\УНИК\программирование\игра\zvezda.wav")
         arcade.set_background_color(arcade.color.COOL_BLACK)
 
-        self.view_bottom = 0
-        self.view_left = 0
-        self.view_right = 0
-        self.view_top = 0
-
-
         self.score = 0
 
 
