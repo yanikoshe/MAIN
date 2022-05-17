@@ -1,0 +1,5 @@
+![пень](https://user-images.githubusercontent.com/99640642/168889248-58df5410-79f1-4ec4-8706-4c92dcdf1e62.png)
+![перс-идет2](https://user-images.githubusercontent.com/99640642/168889254-2f89d5f4-e575-4476-9769-f9a16e4d7c13.png)
+![звезда](https://user-images.githubusercontent.com/99640642/168889271-97e8c225-6524-4e75-8056-3a2bfd2d6606.png)
+![перс-идет](https://user-images.githubusercontent.com/99640642/168889281-e6b853dd-00c9-4a11-89a9-83daa722a373.png)
+![перс-стоит](https://user-images.githubusercontent.com/99640642/168889283-a4b0a3e0-7c2f-4d93-b34b-f8702468b6f7.png)
